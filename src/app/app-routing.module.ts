@@ -14,7 +14,7 @@ const routes: Routes = [
 
 @NgModule({
   imports: [
-    RouterModule.forRoot(routes),
+    RouterModule.forRoot(routes),//esto es para rutas principales
     PagesRoutingModule,
     AuthRoutingModule
   ],
