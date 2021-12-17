@@ -14,20 +14,20 @@ declare const gapi: any; //Dado que estoy importando desde un script a "gapi", d
 })
 export class LoginComponent implements OnInit {
 
-  constructor(private router: Router, private fb: FormBuilder, private usuarioService: UsuarioService, private ngZone: NgZone) { }
-
-  ngOnInit(): void {
-    this.renderButton();
-  }
-
   public formSubmitted = false;//para saber si el formulario se envio
   public auth2: any;
-
+  
   public loginForm = this.fb.group({
     email: [localStorage.getItem('email') || '', [Validators.required, Validators.email]],
     password: ['', Validators.required],
     remember: [false]
   });
+  
+  constructor(private router: Router, private fb: FormBuilder, private usuarioService: UsuarioService, private ngZone: NgZone) { }
+
+  ngOnInit(): void {
+    this.renderButton();
+  }
 
   login() {
     //console.log(this.loginForm.value);
@@ -57,6 +57,14 @@ export class LoginComponent implements OnInit {
     this.startApp()
   }
 
+  async startApp() {
+
+    await this.usuarioService.googleInit();
+    this.auth2 = this.usuarioService.auth2;
+    this.attachSignin(document.getElementById('my-signin2'));
+
+  }
+  
   attachSignin(element) {
     this.auth2.attachClickHandler(element, {},
       (googleUser) => {
@@ -70,13 +78,5 @@ export class LoginComponent implements OnInit {
       }, (error) => {
         alert(JSON.stringify(error, undefined, 2));
       });
-  }
-
-  async startApp() {
-
-    await this.usuarioService.googleInit();
-    this.auth2 = this.usuarioService.auth2;
-    this.attachSignin(document.getElementById('my-signin2'));
-
   }
 }

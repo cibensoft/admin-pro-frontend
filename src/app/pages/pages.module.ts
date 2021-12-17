@@ -4,7 +4,7 @@ import { CommonModule } from '@angular/common';
 // import { AppRoutingModule } from '../app-routing.module';//Este modulo ya esta cargado en memoria ya que lo importe
 // //en app-module, asi que en este caso simplemente lo va a volver a utilizar, no es que lo importa dos veces
 import { RouterModule } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 //Modulos propios
 import { SharedModule } from '../shared/shared.module';
@@ -17,6 +17,7 @@ import { PagesComponent } from './pages.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { PromesasComponent } from './promesas/promesas.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
+import { PerfilComponent } from './perfil/perfil.component';
 
 @NgModule({
   declarations: [
@@ -27,6 +28,7 @@ import { RxjsComponent } from './rxjs/rxjs.component';
     AccountSettingsComponent,
     PromesasComponent,
     RxjsComponent,
+    PerfilComponent,
   ],
   exports: [
     DashboardComponent,
@@ -38,6 +40,7 @@ import { RxjsComponent } from './rxjs/rxjs.component';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     SharedModule,
     // AppRoutingModule
     RouterModule,
