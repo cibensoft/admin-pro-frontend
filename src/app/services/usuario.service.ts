@@ -4,6 +4,7 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { catchError, map, tap } from 'rxjs/operators';
 import { environment } from 'src/environments/environment';
+import { CargarUsuario } from '../interfaces/cargar-usuarios.interface';
 import { LoginForm } from '../interfaces/login-form.interface';
 import { RegisterForm } from '../interfaces/register-form.interface';
 import { Usuario } from '../models/usuario.model';
@@ -31,6 +32,14 @@ export class UsuarioService {
     return this.usuario.uid || '';
   }
 
+  get headers() {
+    return {
+      headers: {
+        'x-token': this.token
+      }
+    }
+  }
+
   googleInit() {
     return new Promise<void>(resolve => {//Si no le pongo el "void" marca como error la linea del resolve() pero aun asi funciona igual
       gapi.load('auth2', () => {
@@ -38,7 +47,7 @@ export class UsuarioService {
           client_id: '977894616798-aiurdnnvlvdtrpdv7j41vrgj4b4vbpdb.apps.googleusercontent.com',
           cookiepolicy: 'single_host_origin',
         });
-        resolve();//<-------ERROR!!!!
+        resolve();//<-------aca marca error si no especifico que la promesa retorna un void. Aunque marca el error, permite el funcionamiento de la app
       });
     })
   }
@@ -84,11 +93,7 @@ export class UsuarioService {
       role: this.usuario.role
     }
 
-    return this.http.put(`${base_url}/usuarios/${this.uid}`, data, {
-      headers: {
-        'x-token': this.token
-      }
-    })
+    return this.http.put(`${base_url}/usuarios/${this.uid}`, data, this.headers)
   }
 
   login(formData: LoginForm) {
@@ -107,5 +112,37 @@ export class UsuarioService {
           localStorage.setItem('token', resp.token)
         })
       )
+  }
+
+  cargarUsuarios(desde: number = 0) {
+    const url = `${base_url}/usuarios?desde=${desde}`;
+    return this.http.get<CargarUsuario>(url, this.headers)//se podrian implementar interceptors para agregar los headers en todas las peticiones http que lo requieran
+      .pipe(
+        //delay(5000),
+        map(resp => {//lo que se hace aca es cambiar el objeto que viene en la respuesta por un modelo de tipo usuario.
+          const usuarios = resp.usuarios.map(
+            user => new Usuario(user.nombre, user.email, '', user.img, user.google, user.role, user.uid)
+          );
+
+          return {
+            total: resp.total,
+            usuarios
+          };
+        })
+      )
+  }
+
+  eliminarUsuario(usuario: Usuario) {
+    const url = `${base_url}/usuarios/${usuario.uid}`
+    return this.http.delete(url, this.headers);
+  }
+
+  guardarUsuario(usuario: Usuario) {//Tambien se podria crear una interface para asignarle el tipo a "data"
+    // data = {
+    //   ...data,
+    //   role: this.usuario.role
+    // }
+
+    return this.http.put(`${base_url}/usuarios/${usuario.uid}`, usuario, this.headers)
   }
 }

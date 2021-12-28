@@ -3,12 +3,15 @@
         <button (click)=cambiarValor(-5) [ngClass]="btnClass" type="button"><i class="fa fa-minus"></i></button>
     </span>
 
+    <!--[()]indica que se emiten y reciben valores-->
+    <!--para que ngModel funcione, se debe importar en el modulo correspondiente 'FormsModule' desde @angular/forms-->
     <input type="number" 
            class="form-control"
            [ngClass]="{'is-invalid': progreso > 100 || progreso < 0}" 
            placeholder="Progreso" 
            [(ngModel)]="progreso" 
            (ngModelChange)="onChange($event)">
+           <!-- el ngModelChange se usa para cuando se cambia el valor del imput manualmente -->
     
     <span class="input-group-btn">
         <button (click)=cambiarValor(5) [ngClass]="btnClass" type="button"><i class="fa fa-plus"></i></button>

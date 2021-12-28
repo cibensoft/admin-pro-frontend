@@ -11,7 +11,7 @@ import { UsuarioService } from 'src/app/services/usuario.service';
 })
 export class RegisterComponent {
 
-  public formSubmitted = false;//para saber si el formulario se envio
+  public formSubmitted = false;//para saber si se intento enviar el formulario haciendo click en sign up
 
   public registerForm = this.fb.group({
     nombre: ['Fernando', Validators.required],
@@ -27,7 +27,6 @@ export class RegisterComponent {
 
   crearUsuario() {
     this.formSubmitted = true;
-    console.log(this.registerForm.value);
 
     if (this.registerForm.invalid) {
       return;
