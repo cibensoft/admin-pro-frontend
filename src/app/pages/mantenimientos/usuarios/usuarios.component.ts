@@ -28,6 +28,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.cargarUsuarios();
+
+    // con esta subscription se espera a que algo cambie para poder disparar el evento de cargar usuarios y que se pueda visualizar la foto correspondiente y recien cambiada
     this.imgSubs = this.modalImagenService.nuevaImagen
       .pipe(
         delay(100)
@@ -65,7 +67,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     if (termino.length === 0) {
       return this.usuarios = this.usuariosTemp;
     }
-    this.busquedasServices.buscar('usuarios', termino).subscribe(resp => {
+    this.busquedasServices.buscar('usuarios', termino).subscribe((resp: Usuario[]) => {
       this.usuarios = resp;
     })
   }
