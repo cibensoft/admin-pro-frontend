@@ -31,7 +31,8 @@ export class MedicoComponent implements OnInit {
 
     //this.activatedRoute.params.subscribe(params=>{//en params vienen los parametros
     this.activatedRoute.params.subscribe(({ id }) => {
-      //como yo se que en params viene el parametro, entonces desestructuro para obtener el "id". El nombre "id" es el que defini en pages.routing.ts 
+      //como yo se que en params viene el parametro, entonces desestructuro para obtener el "id". 
+      //El nombre "id" es el que defini en pages.routing.ts 
       //{ path: 'medico/:id', component: MedicoComponent, data: { titulo: 'Mantenimiento de medicos' } },   
       this.cargarMedico(id);
     })
@@ -64,7 +65,8 @@ export class MedicoComponent implements OnInit {
           return this.router.navigateByUrl(`/dashboard/medicos`);
         }
 
-        //obtengo el nombre del medico y el id del hospital por desestructuracion. El id del hospital se obtiene de esa forma ya que esta dentro de otro objeto(hospital)
+        //obtengo el nombre del medico y el id del hospital por desestructuracion. 
+        //El id del hospital se obtiene de esa forma ya que esta dentro de otro objeto(hospital)
         const { nombre, hospital: { _id } } = medico;
         console.log(nombre, _id);
         this.medicoSeleccionado = medico;
